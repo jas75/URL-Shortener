@@ -7,3 +7,9 @@ const CounterSchema= Schema({
 });
 
 var counter = mongoose.model('counter',CounterSchema);
+
+const urlSchema = new Schema({
+	_id: {type: Number, index: true},
+	long_url: String,
+	created_at: Date
+});
