@@ -22,18 +22,18 @@ app.get('/',(req,res)=>{
 
 app.post('/api/shorten',(req,res)=>{
 	if(!req.body.url){
-		res.json({error:'URL was not provided'});
+		res.json({success:false,error:'URL was not provided'});
 	}
 	else{
 		var longUrl=hash.checkFormat(req.body.url);	// check if url format begins with http or www
 		Url.findOne({long_url:longUrl},(err,url)=>{
 			if (err) {
-				res.json({error:err});
+				res.json({success:false,error:err});
 			}
 			else{
 				// If URL already exists
 				if(url){
-					res.json({longUrl:url.long_url,shortUrl:url.short_url});
+					res.json({success:true,longUrl:url.long_url,shortUrl:url.short_url});
 				}
 				else{
 					const shortUrl=config.webhost+hash.makeId();//Generate a random id
@@ -45,10 +45,10 @@ app.post('/api/shorten',(req,res)=>{
 
 					newUrl.save((err)=>{
 						if(err){
-							res.json({error:'Something went wrong: '+err});
+							res.json({success:false,error:'Something went wrong: '+err});
 						}
 						else{
-							res.json({shortUrl: newUrl.short_url, longUrl:newUrl.long_url});
+							res.json({success:true,shortUrl: newUrl.short_url, longUrl:newUrl.long_url});
 						}
 					});
 				}
