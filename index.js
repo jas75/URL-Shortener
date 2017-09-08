@@ -5,7 +5,7 @@ const mongoose=require('mongoose');
 mongoose.Promise = global.Promise;
 const bodyParser=require('body-parser');
 const config = require('./config');
-const hash=require('./hash.js');
+const hash=require('./hash');
 
 //Url model
 const Url= require('./models/url');
@@ -64,7 +64,7 @@ app.get('/:encoded_id',(req,res)=>{
 		res.json({error:'URL was not provided'});
 	}
 	else{
-		Url.findOne({short_url:'http://localhost:8080/'+req.params.encoded_id},(err,url)=>{ // Look for url_short in database
+		Url.findOne({short_url:config.webhost+req.params.encoded_id},(err,url)=>{ // Look for url_short in database
 			if(err){
 				res.json({error:'Something went wrong: '+ err});
 			}
@@ -73,8 +73,8 @@ app.get('/:encoded_id',(req,res)=>{
 				if(url){
 					res.redirect(url.long_url);
 				}
-				else{
-					res.json({message:'URL not found'});
+				else{			
+					res.redirect(config.webhost);
 				}
 			}
 		});
