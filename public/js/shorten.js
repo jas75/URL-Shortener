@@ -12,8 +12,10 @@ $('.btn-shorten').on('click',function(){
 		}
 		else{
 			var resultHTML='<a class="result" target="_blank" href="'+data.longUrl+'">'+data.shortUrl+'</a>';
+			var tableDisplay='<td><a>'+data.longUrl+'</a></td><td><a>'+data.shortUrl+'</a></td><td>'+data.createdAt+'</td>';
 			$('#link').html(resultHTML);
 			$('#link').hide().fadeIn('slow');
+			$('#direct').html(tableDisplay);
 		}
 	});
 });

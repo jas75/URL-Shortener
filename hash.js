@@ -2,13 +2,13 @@
 function checkFormat(url){
 
 	var validUrl='';
-	if(url.startsWith("http://") || url.startsWith("www.")){
+	if(url.startsWith("http://") || url.startsWith("www.") || url.startsWith('https://')){
 		validUrl=url;
 	}
 	else{
 		validUrl = 'http://'+url;
 	}
-	console.log(validUrl);
+	
 	return validUrl;
 }
 

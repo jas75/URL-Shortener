@@ -9,6 +9,8 @@
   <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link href="css/styles.css" rel="stylesheet">
+  <script type="text/javascript" src="ejs_production.js"></script>
+
 </head>
 <body>
 
@@ -35,6 +37,34 @@
               <div id="link"></div>
             </div>
 
+              
+              <h2>Latest Shortened URLS</h2>
+              
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>URL</th>
+                    <th>Shorten URL</th>
+                    <th>Created at</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <% for(var i=0;i<urls.length;i++){%>
+                  <tr id="direct">
+                    
+                  </tr>
+                  <tr>
+                    <td><a href=""><%= urls[i].long_url%></a></td>
+                    <td><a href=""><%= urls[i].short_url%></a></td>
+                    <td><%= urls[i].created_at%></td>
+                  </tr>
+                <%}%>
+                </tbody>
+              </table>
+              
+              
+            
+
           </div>
 
         </div>
@@ -45,5 +75,6 @@
   <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="js/shorten.js"></script>
+  <script src="js/latest.js"></script>
 </body>
 </html>

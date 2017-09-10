@@ -6,7 +6,6 @@ mongoose.Promise = global.Promise;
 const bodyParser=require('body-parser');
 const config = require('./config');
 const hash=require('./hash');
-
 //Url model
 const Url= require('./models/url');
 
@@ -17,7 +16,17 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,'public')));
 
 app.get('/',(req,res)=>{
-	res.sendFile(path.join(__dirname,'views/index.html'));
+	Url.find({}).sort({'_id':-1}).exec((err,urls)=>{
+		if(err){
+			res.json({success:false,message:'Something went wrong: '+err});
+		}
+		else{
+			if (urls) {
+				res.render(path.join(__dirname,'views/index.ejs'),{urls:urls});
+			}
+		}
+	}); 
+	
 });
 
 app.post('/api/shorten',(req,res)=>{
@@ -28,7 +37,7 @@ app.post('/api/shorten',(req,res)=>{
 		var longUrl=hash.checkFormat(req.body.url);	// check if url format begins with http or www
 		Url.findOne({long_url:longUrl},(err,url)=>{
 			if (err) {
-				res.json({success:false,error:err});
+				res.json({success:false,error:'Something went wrong: ' + err});
 			}
 			else{
 				// If URL already exists
@@ -48,7 +57,7 @@ app.post('/api/shorten',(req,res)=>{
 							res.json({success:false,error:'Something went wrong: '+err});
 						}
 						else{
-							res.json({success:true,shortUrl: newUrl.short_url, longUrl:newUrl.long_url});
+							res.json({success:true,shortUrl: newUrl.short_url, longUrl:newUrl.long_url,createdAt:newUrl.created_at});
 						}
 					});
 				}
@@ -57,6 +66,22 @@ app.post('/api/shorten',(req,res)=>{
 		});
 	}
 });
+
+app.get('/latest-urls',(req,res)=>{
+	
+	Url.find({}).sort({'_id':-1}).exec((err,url)=>{
+		if(err){
+			res.json({success:false,message:'Something went wrong: '+err});
+		}
+		else{
+			if (url) {
+				res.render('index.ejs',{latest:url});
+			}
+		}
+	}); 
+});
+
+
 
 app.get('/:encoded_id',(req,res)=>{
 
@@ -80,6 +105,10 @@ app.get('/:encoded_id',(req,res)=>{
 		});
 	}
 });
+
+
+
+
 
 app.listen(8080,()=>{
 	console.log('Listening on port 8080');
